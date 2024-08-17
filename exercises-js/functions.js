@@ -214,4 +214,91 @@
         console.log(criarPessoa('bruno', 24, 'masculino'));
 
 // Classe vs Função Factory
-    
+    class Pessoa {
+        constructor(nome) {
+            this.nome = nome;
+        };
+
+        falar() {
+            console.log(`Meu nome é ${this.nome}`);
+        };
+    };
+
+    const p1 = new Pessoa('João');
+    p1.falar();
+
+    const criarPessoa = nome => {
+        return {
+            falar: () => console.log(`Meu nome é ${nome}`)
+        }
+    };
+
+    //funcao factory
+    function criaPessoa(nome) {
+        this.nome = nome
+
+        this.falar = function() {
+            console.log(`Meu nome é ${this.nome}`)
+        }
+    };
+    const p = new criaPessoa('Bruno');
+    p.falar();
+
+// IIFE -> Immediately Invoked Function Expression
+    //para fugir do escopo global, não ter risco
+        //de manipularem o código
+            //sempre interessante tentar fugir do escopo global, como criar funções dessa forma.
+            (function() {
+                console.log('Será executado na hora!')
+                console.log('Foge do escopo mais abrangente!')
+            })();
+
+// Call & Apply
+function getPreco(imposto = 0, moeda = 'R$') {
+    return `${moeda} ${this.preco * (1 - this.desc) * (1 + imposto)}` 
+    }
+
+const produto = {
+    nome: 'Notebook',
+    preco: 4589,
+    desc: 0.15,
+    getPreco
+}
+
+console.log(produto.getPreco())
+
+const carro = {preco: 49000, desc: 0.20}
+
+console.log(getPreco.call(carro))
+console.log(getPreco.apply(carro))
+
+console.log(getPreco.call(carro, 0.17, '$'))
+console.log(getPreco.apply(carro, [0.17, '$']))
+
+/*
+um assunto interessante que acontece dentro do Javascript que é a comparação entre números em formato string.
+
+Abaixo temos uma cadeia de string de números.
+
+const cadeia_de_strings = '1, 2, 3, 4, 5, 6, 7, 8, 9'
+Se pegarmos alguns dos valores da cadeia de strings e fizermos a comparação entre nossas strings de número até o nove, ela mantem um comportamento normal. Como se estivéssemos comparando números.
+
+'1' > '2'
+//output : false
+'1' > '1'
+//output : false
+'2' > '1'
+//output : true
+'4' > '2'
+//output : true
+Agora se compararmos os valores depois do nove, a comparação irá validar o primeiro número da cadeia numeral, validando sua ordem alfabética. Por exemplo:
+
+'2' > '12'
+//output : true
+'5' > '42'
+//output : true
+'3' > '29'
+//output : true
+Com isso, podemos ver que não é uma abordagem muito boa comparar números em formato de string.
+*/
+
